@@ -8,18 +8,19 @@ export default function QueueDisplay({ queue, totalLetters }: QueueDisplayProps)
         Queued Letters ({totalLetters}/15)
       </div>
       <div className="flex items-center space-x-2 bg-white p-3 rounded-lg shadow-sm border border-gray-200 min-h-[3.5rem]">
-        {queue.slice(0, VISIBLE_QUEUE_SIZE).map((letter, index) => (
+        {Array.from({ length: VISIBLE_QUEUE_SIZE }).map((_, index) => (
           <div
             key={index}
             className={`
               w-11 h-11 flex items-center justify-center
-              bg-gray-50 border-2 border-gray-200 rounded-lg
+              bg-[#f5e6c5] rounded-lg
               text-xl font-bold
-              ${index > 0 ? 'opacity-50' : ''}
               transition-opacity duration-200
+              ${index > 0 ? 'opacity-50' : ''}
+              ${queue[index] ? '' : 'invisible'}
             `}
           >
-            {letter.toUpperCase()}
+            {queue[index] ? queue[index].toUpperCase() : ''}
           </div>
         ))}
       </div>

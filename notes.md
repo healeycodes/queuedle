@@ -22,13 +22,14 @@ Queuedle is a word puzzle game where players slide rows and columns of letters t
 - Words can be formed horizontally or vertically
 - Minimum word length is 3 letters
 - Words must be valid English words (checked against a dictionary)
-- Words are highlighted with different colors when formed
+- Words are highlighted with a soft blue outline that wraps the entire word
+- The outline is created using CSS borders (via Tailwind)
+- If words overlap, the borders are combined so that each word is clearly outlined
 - Multiple words can be formed in a single move
 
 ### Scoring System
 - Each letter in a formed word is worth 1 point
-- Each move incurs a penalty of 0.25 points
-- Final score = Sum of word lengths - (0.25 × number of moves)
+- Final score = Sum of word lengths
 
 ### Letter Queue
 - Queue size is 15 letters total
@@ -59,7 +60,7 @@ The game state is managed through a React state object containing:
 
 ### Core Components
 1. Grid: Main 5x5 game board
-2. Tile: Individual letter tile with highlighting
+2. Tile: Individual letter tile with blue border highlighting
 3. ArrowButton: Control buttons for sliding
 4. QueueDisplay: Shows upcoming letters
 5. ScoreDisplay: Shows current score and moves
@@ -74,15 +75,15 @@ The game state is managed through a React state object containing:
    - Checks both horizontal and vertical words
    - Validates words against dictionary
    - Prevents counting sub-words of longer words
-   - Assigns unique colors to different words
+   - Assigns border classes to each tile to wrap the entire word with a blue outline
+   - Handles overlapping words by combining borders
 
 3. Scoring:
    - Calculates points based on word lengths
-   - Applies move penalty
    - Updates total score
 
 ### Visual Features
-- Rainbow gradient borders for word highlighting
+- Soft blue outline for word highlighting using CSS borders
 - Disabled states for restricted moves
 - Fade effects for future queue letters
 - Responsive design for different screen sizes
@@ -104,3 +105,13 @@ The game state is managed through a React state object containing:
 - Tailwind CSS for styling
 - React for UI components
 - Custom game logic implementation
+
+## UI/UX Updates
+- The queue display always shows 5 tiles (with invisible tiles for empty slots) so spacing never collapses, even when the queue is not full.
+- All slide buttons are now disabled when the queue is empty, preventing further moves until a new game starts.
+
+## Visual Theme: Scrabble Colors
+- Tiles use a Scrabble beige color (#f5e6c5)
+- Queue tiles and ArrowButton backgrounds also use Scrabble beige
+- Queue container background is a subtle off-white (#f9f6f2)
+- CSS variables for these colors are defined in globals.css for easy future updates

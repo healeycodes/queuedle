@@ -48,11 +48,11 @@ const SCRABBLE_TILES = [
   { letter: 'z', count: 1 }
 ];
 
-// Get the current UTC day as a seed
+// Get the current local day as a seed
 export const getCurrentDaySeed = (): number => {
   const now = new Date();
-  const utcDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-  return utcDate.getTime();
+  const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return localDate.getTime();
 };
 
 // Generate a random letter based on Scrabble tile frequencies
@@ -84,4 +84,20 @@ export const generateGameState = (seed: number) => {
   const queue = Array(15).fill(null).map(() => getRandomScrabbleLetter(random));
   
   return { grid, queue };
+};
+
+import { findWords } from './wordDetection';
+
+// Generate a valid game state with no words on the board
+export const generateValidGameState = (baseSeed: number) => {
+  let attempt = 0;
+  while (true) {
+    const seed = baseSeed + attempt;
+    const { grid, queue } = generateGameState(seed);
+    const highlights = findWords(grid);
+    if (highlights.length === 0) {
+      return { grid, queue, attempt };
+    }
+    attempt++;
+  }
 }; 

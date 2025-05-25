@@ -5,19 +5,24 @@ import { GameState, GRID_SIZE, QUEUE_SIZE, VISIBLE_QUEUE_SIZE, SlideDirection } 
 import Grid from './components/Grid';
 import QueueDisplay from './components/QueueDisplay';
 import { handleSlide } from './utils/gameLogic';
-import { getCurrentDaySeed, generateGameState } from './utils/seededRandom';
+import { getCurrentDaySeed, generateValidGameState } from './utils/seededRandom';
+import { findWords, calculateWordScore, getWordsFromHighlights } from './utils/wordDetection';
 
 // Initialize game state with seeded random
 const getInitialGameState = (): GameState => {
   const seed = getCurrentDaySeed();
-  const { grid, queue } = generateGameState(seed);
-  
+  const { grid, queue, attempt } = generateValidGameState(seed);
+  console.log(`[Queuedle] Required ${attempt} attempts to generate a valid board`);
+  const wordHighlights = findWords(grid);
+  const wordScore = calculateWordScore(wordHighlights);
+  const score = wordScore;
+  const words = getWordsFromHighlights(grid, wordHighlights);
+
   return {
     grid,
     queue,
-    score: 0,
-    wordScore: 0,
-    movePenalty: 0,
+    score,
+    wordScore,
     moves: 0,
     restrictions: {
       rows: {
@@ -29,17 +34,18 @@ const getInitialGameState = (): GameState => {
         down: Array(GRID_SIZE).fill(false)
       }
     },
-    wordHighlights: []
+    wordHighlights,
+    words
   };
 };
 
 // Helper to get Queuedle day number (24 May 2025 is day 1)
 const getQueuedleDayNumber = () => {
   const msPerDay = 24 * 60 * 60 * 1000;
-  const firstDay = Date.UTC(2025, 4, 24); // Months are 0-indexed: 4 = May
+  const firstDay = new Date(2025, 4, 24).getTime(); // Months are 0-indexed: 4 = May
   const now = new Date();
-  const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  return Math.floor((todayUTC - firstDay) / msPerDay) + 1;
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  return Math.floor((todayLocal - firstDay) / msPerDay) + 1;
 };
 
 export default function Home() {
@@ -64,7 +70,13 @@ export default function Home() {
   }, []);
 
   const onSlide = (direction: SlideDirection, index: number) => {
-    setGameState(prevState => handleSlide(prevState, direction, index));
+    setGameState(prevState => {
+      const nextState = handleSlide(prevState, direction, index);
+      return {
+        ...nextState,
+        words: getWordsFromHighlights(nextState.grid, nextState.wordHighlights)
+      };
+    });
   };
 
   return (
@@ -73,33 +85,35 @@ export default function Home() {
         Queuedle #{getQueuedleDayNumber()} by <a className="text-blue-500" href="https://twitter.com/healeycodes">@healeycodes</a>
       </p>
       <p className="max-w-xs mx-auto text-md text-gray-700 mb-6 text-left">
-        Slide rows or columns to form words, using the queue of upcoming letters. Each move inserts and shifts the grid. No need to use all tiles — solve for the highest score.
+      Slide rows or columns to form words, pulling letters from the queue. Each row or column can only slide in one direction. No need to use all tiles — solve for the highest score.
       </p>
       
-      <div className="mb-6">
+      <div className="mb-20">
         <QueueDisplay 
           queue={gameState.queue} 
           totalLetters={gameState.queue.length}
         />
       </div>
 
-      <div className="mb-6">
+      <div className="mb-20">
         <Grid 
           grid={gameState.grid}
           onSlide={onSlide}
           restrictions={gameState.restrictions}
           wordHighlights={gameState.wordHighlights}
+          disableAll={gameState.queue.length === 0}
         />
       </div>
 
       <div className="text-md font-medium text-gray-700 mb-4">
-        Score: {gameState.score.toFixed(1)} ({gameState.wordScore.toFixed(0)} - {gameState.movePenalty.toFixed(1)})
+        Words: {gameState.words.join(', ') || '...'}<br />
+        Score: {gameState.score}<br />
+        Moves: {gameState.moves}
       </div>
 
       <div className="text-md font-medium text-gray-400 mb-2">
         Each letter in a word: 1 point<br />
-        Each move: -0.25 points<br />
-        Word list: Scrabble (TWL06-US)
+        Word list: Scrabble (TWL06-US 3+)
       </div>
     </main>
   );

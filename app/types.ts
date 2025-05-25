@@ -4,10 +4,10 @@ export interface GameState {
   queue: string[];
   score: number;
   wordScore: number;
-  movePenalty: number;
   moves: number;
   restrictions: SlideRestrictions;
   wordHighlights: WordHighlight[];
+  words: string[]; // List of currently detected words
 }
 
 export interface SlideRestrictions {
@@ -27,12 +27,11 @@ export interface GridProps {
   onSlide: (direction: SlideDirection, index: number) => void;
   restrictions: SlideRestrictions;
   wordHighlights: WordHighlight[];
+  disableAll?: boolean;
 }
 
 export interface TileProps {
   letter: string;
-  isPartOfWord: boolean;
-  wordColor?: 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple';
 }
 
 export interface ArrowButtonProps {
@@ -56,7 +55,6 @@ export interface ScoreDisplayProps {
 export interface BaseWordHighlight {
   start: number;
   end: number;
-  color: string;
 }
 
 export interface HorizontalWordHighlight extends BaseWordHighlight {
@@ -73,7 +71,6 @@ export interface WordHighlight {
   start: number;
   end: number;
   direction: 'horizontal' | 'vertical';
-  color: 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple';
   row: number;
   col: number;
 }
@@ -95,5 +92,4 @@ export const GRID_SIZE = 5;
 export const QUEUE_SIZE = 15;
 export const VISIBLE_QUEUE_SIZE = 5;
 export const MIN_WORD_LENGTH = 3;
-export const POINTS_PER_LETTER = 1;
-export const MOVE_PENALTY = 0.25; 
+export const POINTS_PER_LETTER = 1; 

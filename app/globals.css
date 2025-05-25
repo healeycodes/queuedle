@@ -7,3 +7,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Scrabble color theme */
+:root {
+  --scrabble-beige: #f5e6c5;
+  --scrabble-offwhite: #f9f6f2;
+}

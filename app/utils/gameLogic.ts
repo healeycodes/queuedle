@@ -1,5 +1,5 @@
 import { GameState, SlideDirection } from '../types';
-import { findWords, calculateWordScore } from './wordDetection';
+import { findWords, calculateWordScore, getWordsFromHighlights } from './wordDetection';
 
 // Helper to create a new array with a value inserted at a specific index
 const insertAt = <T>(arr: T[], index: number, value: T): T[] => {
@@ -118,8 +118,8 @@ export const handleSlide = (
   // Find words and calculate score
   const wordHighlights = findWords(newGrid);
   const wordScore = calculateWordScore(wordHighlights);
-  const movePenalty = 0.5;
-  const newScore = wordScore - (gameState.moves + 1) * movePenalty;
+  const newScore = wordScore;
+  const words = getWordsFromHighlights(newGrid, wordHighlights);
 
   return {
     ...gameState,
@@ -129,7 +129,7 @@ export const handleSlide = (
     wordHighlights,
     score: newScore,
     wordScore,
-    movePenalty: (gameState.moves + 1) * movePenalty,
-    moves: gameState.moves + 1
+    moves: gameState.moves + 1,
+    words
   };
 }; 
