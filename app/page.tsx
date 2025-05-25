@@ -49,28 +49,44 @@ const getQueuedleDayNumber = () => {
 };
 
 export default function Home() {
-  const [gameState, setGameState] = useState<GameState>(getInitialGameState);
+  const [gameState, setGameState] = useState<GameState | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [timeToMidnight, setTimeToMidnight] = useState('');
 
-  // Check for new day at midnight UTC
+  // Helper to calculate time until local midnight
+  const getTimeUntilMidnight = () => {
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const diffMs = midnight.getTime() - now.getTime();
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours}h${minutes}m`;
+  };
+
+  // Update countdown every minute
   useEffect(() => {
-    const checkNewDay = () => {
-      const currentSeed = getCurrentDaySeed();
-      const lastSeed = localStorage.getItem('lastGameSeed');
-      
-      if (lastSeed !== currentSeed.toString()) {
-        localStorage.setItem('lastGameSeed', currentSeed.toString());
-        setGameState(getInitialGameState());
-      }
-    };
-
-    // Check immediately and then every minute
-    checkNewDay();
-    const interval = setInterval(checkNewDay, 60000);
+    setTimeToMidnight(getTimeUntilMidnight());
+    const interval = setInterval(() => {
+      setTimeToMidnight(getTimeUntilMidnight());
+    }, 60000);
     return () => clearInterval(interval);
   }, []);
 
+  // Only initialize game state on mount
+  useEffect(() => {
+    const initialize = () => {
+      const state = getInitialGameState();
+      setGameState(state);
+      setLoading(false);
+      localStorage.setItem('lastGameSeed', getCurrentDaySeed().toString());
+    };
+    initialize();
+  }, []);
+
   const onSlide = (direction: SlideDirection, index: number) => {
+    if (!gameState) return;
     setGameState(prevState => {
+      if (!prevState) return prevState;
       const nextState = handleSlide(prevState, direction, index);
       return {
         ...nextState,
@@ -78,6 +94,10 @@ export default function Home() {
       };
     });
   };
+
+  // Blank grid and queue for loading state
+  const blankGrid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
+  const blankQueue = Array(VISIBLE_QUEUE_SIZE).fill('');
 
   return (
     <main className="min-h-screen p-2 flex flex-col items-center bg-gray-50">
@@ -87,30 +107,32 @@ export default function Home() {
       <p className="max-w-xs mx-auto text-md text-gray-700 mb-6 text-left">
       Slide rows or columns to form words, pulling letters from the queue. Each row or column can only slide in one direction. No need to use all tiles — solve for the highest score.
       </p>
-      
       <div className="mb-20">
         <QueueDisplay 
-          queue={gameState.queue} 
-          totalLetters={gameState.queue.length}
+          queue={loading || !gameState ? blankQueue : gameState.queue} 
+          totalLetters={loading || !gameState ? 0 : gameState.queue.length}
         />
       </div>
-
       <div className="mb-20">
         <Grid 
-          grid={gameState.grid}
+          grid={loading || !gameState ? blankGrid : gameState.grid}
           onSlide={onSlide}
-          restrictions={gameState.restrictions}
-          wordHighlights={gameState.wordHighlights}
-          disableAll={gameState.queue.length === 0}
+          restrictions={loading || !gameState ? {
+            rows: { left: Array(GRID_SIZE).fill(true), right: Array(GRID_SIZE).fill(true) },
+            columns: { up: Array(GRID_SIZE).fill(true), down: Array(GRID_SIZE).fill(true) }
+          } : gameState.restrictions}
+          wordHighlights={loading || !gameState ? [] : gameState.wordHighlights}
+          disableAll={loading || !gameState || gameState.queue.length === 0}
         />
       </div>
-
-      <div className="text-md font-medium text-gray-700 mb-4">
-        Words: {gameState.words.join(', ') || '...'}<br />
-        Score: {gameState.score}<br />
-        Moves: {gameState.moves}
+      <div className="text-md font-medium text-gray-700 mb-6">
+        Words: {loading || !gameState ? '...' : (gameState.words.join(', ') || '...')}<br />
+        Score: {loading || !gameState ? '...' : gameState.score}<br />
+        Moves: {loading || !gameState ? '...' : gameState.moves}
       </div>
-
+      <div className="text-md font-medium text-gray-700 mb-6">
+      The next Queuedle starts in {timeToMidnight}.
+      </div>
       <div className="text-md font-medium text-gray-400 mb-2">
         Each letter in a word: 1 point<br />
         Word list: Scrabble (TWL06-US 3+)
