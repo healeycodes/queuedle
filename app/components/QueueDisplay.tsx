@@ -16,14 +16,14 @@ export default function QueueDisplay({ queue, totalLetters, isLoading = false }:
               <motion.div
                 key={index}
                 initial={{ scale: 0.7, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                animate={{ scale: 1, opacity: index > 0 ? 0.35 : 1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * index }}
                 className={`
                   w-11 h-11 flex items-center justify-center
                   bg-[#f5e6c5] rounded-lg
                   text-xl font-bold
                   transition-opacity duration-200
-                  ${index > 0 ? 'opacity-50' : ''}
+                  ${index > 0 ? 'opacity-35' : ''}
                 `}
               >
                 {/* blank tile for loading */}
@@ -35,14 +35,14 @@ export default function QueueDisplay({ queue, totalLetters, isLoading = false }:
                   <motion.div
                     key={index}
                     initial={{ scale: 0.7, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
+                    animate={{ scale: 1, opacity: index > 0 ? 0.35 : 1 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * index }}
                     className={`
                       w-11 h-11 flex items-center justify-center
                       bg-[#f5e6c5] rounded-lg
                       text-xl font-bold
                       transition-opacity duration-200
-                      ${index > 0 ? 'opacity-50' : ''}
+                      ${index > 0 ? 'opacity-35' : ''}
                     `}
                   >
                     {letter.toUpperCase()}
