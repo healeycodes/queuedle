@@ -16,7 +16,7 @@ export default function QueueDisplay({ queue, totalLetters, isLoading = false }:
               <motion.div
                 key={index}
                 initial={{ scale: 0.7, opacity: 0 }}
-                animate={{ scale: 1, opacity: index > 0 ? 0.35 : 1 }}
+                animate={{ scale: 1, opacity: !isLoading && index > 0 ? 0.35 : 1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * index }}
                 className={`
                   w-11 h-11 flex items-center justify-center
@@ -35,7 +35,7 @@ export default function QueueDisplay({ queue, totalLetters, isLoading = false }:
                   <motion.div
                     key={index}
                     initial={{ scale: 0.7, opacity: 0 }}
-                    animate={{ scale: 1, opacity: index > 0 ? 0.35 : 1 }}
+                    animate={{ scale: 1, opacity: !isLoading && index > 0 ? 0.35 : 1 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * index }}
                     className={`
                       w-11 h-11 flex items-center justify-center
