@@ -97,7 +97,7 @@ export default function Grid({ grid, onSlide, restrictions, wordHighlights, disa
         {grid.map((row, i) =>
           row.map((letter, j) => (
             <motion.div
-              key={`${i}-${j}`}
+              key={`${i}-${j}-${letter}`}
               initial={{ scale: 0.7, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * (i * 5 + j) }}
