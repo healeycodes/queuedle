@@ -14,18 +14,21 @@ export default function ArrowButton({ direction, onClick, disabled }: ArrowButto
 
   return (
     <motion.button
-      onClick={onClick}
+      onTapStart={onClick}
       disabled={disabled}
       whileTap={!disabled ? { scale: 0.75 } : {}}
       className={`
-        w-10 h-10 flex items-center justify-center
+        w-10 h-10 min-w-10 min-h-10 flex items-center justify-center
         rounded-md
+        border border-gray-200
+        shadow-sm
         ${disabled 
           ? 'bg-gray-200 text-gray-300 cursor-not-allowed' 
           : 'bg-white text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer'
         }
         transition-colors duration-200
       `}
+      style={{ minWidth: 40, minHeight: 40 }}
     >
       {getArrowIcon()}
     </motion.button>

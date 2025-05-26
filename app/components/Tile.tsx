@@ -15,6 +15,7 @@ export default function Tile({ letter, isNew }: TileProps) {
           text-2xl font-bold
           transition-colors duration-200
           bg-[#f5e6c5]
+          shadow-sm
         `}
       >
         {letter.toUpperCase()}
@@ -30,6 +31,7 @@ export default function Tile({ letter, isNew }: TileProps) {
         text-2xl font-bold
         transition-colors duration-200
         bg-[#f5e6c5]
+        shadow-sm
       `}
     >
       {letter.toUpperCase()}
