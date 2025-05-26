@@ -1,7 +1,8 @@
 import { ArrowButtonProps } from '../types';
 import { ArrowBigDown, ArrowBigUp, ArrowBigLeft, ArrowBigRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-export default function ArrowButton({ direction, index, onClick, disabled }: ArrowButtonProps) {
+export default function ArrowButton({ direction, onClick, disabled }: ArrowButtonProps) {
   const getArrowIcon = () => {
     switch (direction) {
       case 'left': return <ArrowBigLeft className="w-6 h-6" />;
@@ -12,9 +13,10 @@ export default function ArrowButton({ direction, index, onClick, disabled }: Arr
   };
 
   return (
-    <button
+    <motion.button
       onClick={onClick}
       disabled={disabled}
+      whileTap={!disabled ? { scale: 0.75 } : {}}
       className={`
         w-10 h-10 flex items-center justify-center
         rounded-md
@@ -26,6 +28,6 @@ export default function ArrowButton({ direction, index, onClick, disabled }: Arr
       `}
     >
       {getArrowIcon()}
-    </button>
+    </motion.button>
   );
 } 

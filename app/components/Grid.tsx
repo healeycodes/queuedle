@@ -1,59 +1,72 @@
 import { GridProps } from '../types';
 import Tile from './Tile';
 import ArrowButton from './ArrowButton';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Constants for tile sizing (must match Tile component)
 const TILE_SIZE = 44; // px, matches w-11 h-11
 const TILE_MARGIN = 4; // px, matches m-1
-const TILE_PADDING = 6; // px, matches p-1.5
 const TILE_TOTAL = TILE_SIZE + TILE_MARGIN * 2; // 52px
 
 // Helper to get outline style for a word
 function getOutlineStyle(highlight: GridProps['wordHighlights'][number]) {
+  const OUTLINE_OFFSET = 2; // px
   if (highlight.direction === 'horizontal') {
     return {
-      left: highlight.start * TILE_TOTAL,
-      top: highlight.row * TILE_TOTAL,
-      width: (highlight.end - highlight.start + 1) * TILE_TOTAL,
-      height: TILE_TOTAL,
+      left: highlight.start * TILE_TOTAL - OUTLINE_OFFSET,
+      top: highlight.row * TILE_TOTAL - OUTLINE_OFFSET,
+      width: (highlight.end - highlight.start + 1) * TILE_TOTAL + OUTLINE_OFFSET * 2,
+      height: TILE_TOTAL + OUTLINE_OFFSET * 2,
     };
   } else {
     return {
-      left: highlight.col * TILE_TOTAL,
-      top: highlight.start * TILE_TOTAL,
-      width: TILE_TOTAL,
-      height: (highlight.end - highlight.start + 1) * TILE_TOTAL,
+      left: highlight.col * TILE_TOTAL - OUTLINE_OFFSET,
+      top: highlight.start * TILE_TOTAL - OUTLINE_OFFSET,
+      width: TILE_TOTAL + OUTLINE_OFFSET * 2,
+      height: (highlight.end - highlight.start + 1) * TILE_TOTAL + OUTLINE_OFFSET * 2,
     };
   }
 }
 
-export default function Grid({ grid, onSlide, restrictions, wordHighlights, disableAll = false }: GridProps & { disableAll?: boolean }) {
+export default function Grid({ grid, onSlide, restrictions, wordHighlights, disableAll = false, newTile }: GridProps & { disableAll?: boolean, newTile?: { row: number, col: number } }) {
   return (
     <div className="relative" style={{ width: 5 * TILE_TOTAL, height: 5 * TILE_TOTAL }}>
       {/* Outlines */}
-      {wordHighlights.map((h, idx) => (
-        <div
-          key={idx}
-          className="absolute border-4 border-blue-300 rounded-lg pointer-events-none"
-          style={{
-            ...getOutlineStyle(h),
-            boxSizing: 'border-box',
-            zIndex: 1,
-          }}
-        />
-      ))}
+      <AnimatePresence initial={false}>
+        {wordHighlights.map((h) => (
+          <motion.div
+            key={h.direction + '-' + h.row + '-' + h.col + '-' + h.start + '-' + h.end}
+            className="absolute border-4 border-blue-300 rounded-lg pointer-events-none"
+            style={{
+              ...getOutlineStyle(h),
+              boxSizing: 'border-box',
+              zIndex: 1,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          />
+        ))}
+      </AnimatePresence>
 
       {/* Column arrows (top) */}
       <div className="flex justify-center space-x-2 mb-2" style={{ position: 'absolute', top: -TILE_TOTAL, left: 0, width: '100%' }}>
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={`up-${i}`} className="w-11 flex justify-center">
+          <motion.div
+            key={`up-${i}`}
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * i }}
+            className="w-11 flex justify-center"
+          >
             <ArrowButton
               direction="down"
               index={i}
               onClick={() => onSlide('down', i)}
               disabled={disableAll || restrictions.columns.down[i]}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -61,14 +74,20 @@ export default function Grid({ grid, onSlide, restrictions, wordHighlights, disa
         {/* Row arrows (left) */}
         <div className="flex flex-col justify-center space-y-2 mr-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={`left-${i}`} className="h-11 flex items-center">
+            <motion.div
+              key={`left-${i}`}
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * i }}
+              className="h-11 flex items-center"
+            >
               <ArrowButton
                 direction="right"
                 index={i}
                 onClick={() => onSlide('right', i)}
                 disabled={disableAll || restrictions.rows.right[i]}
               />
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -77,10 +96,17 @@ export default function Grid({ grid, onSlide, restrictions, wordHighlights, disa
       <div className="grid grid-cols-5" style={{ position: 'relative', zIndex: 2 }}>
         {grid.map((row, i) =>
           row.map((letter, j) => (
-            <Tile
+            <motion.div
               key={`${i}-${j}`}
-              letter={letter}
-            />
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * (i * 5 + j) }}
+            >
+              <Tile
+                letter={letter}
+                isNew={!!(newTile && newTile.row === i && newTile.col === j)}
+              />
+            </motion.div>
           ))
         )}
       </div>
@@ -89,14 +115,20 @@ export default function Grid({ grid, onSlide, restrictions, wordHighlights, disa
         {/* Row arrows (right) */}
         <div className="flex flex-col justify-center space-y-2 ml-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={`right-${i}`} className="h-11 flex items-center">
+            <motion.div
+              key={`right-${i}`}
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * i }}
+              className="h-11 flex items-center"
+            >
               <ArrowButton
                 direction="left"
                 index={i}
                 onClick={() => onSlide('left', i)}
                 disabled={disableAll || restrictions.rows.left[i]}
               />
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -104,14 +136,20 @@ export default function Grid({ grid, onSlide, restrictions, wordHighlights, disa
       {/* Column arrows (bottom) */}
       <div className="flex justify-center space-x-2 mt-2" style={{ position: 'absolute', bottom: -TILE_TOTAL, left: 0, width: '100%' }}>
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={`down-${i}`} className="w-11 flex justify-center">
+          <motion.div
+            key={`down-${i}`}
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 22, delay: 0.05 * i }}
+            className="w-11 flex justify-center"
+          >
             <ArrowButton
               direction="up"
               index={i}
               onClick={() => onSlide('up', i)}
               disabled={disableAll || restrictions.columns.up[i]}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

@@ -1,20 +1,6 @@
 import { GameState, SlideDirection } from '../types';
 import { findWords, calculateWordScore, getWordsFromHighlights } from './wordDetection';
 
-// Helper to create a new array with a value inserted at a specific index
-const insertAt = <T>(arr: T[], index: number, value: T): T[] => {
-  const newArr = [...arr];
-  newArr.splice(index, 0, value);
-  return newArr;
-};
-
-// Helper to remove a value at a specific index
-const removeAt = <T>(arr: T[], index: number): T[] => {
-  const newArr = [...arr];
-  newArr.splice(index, 1);
-  return newArr;
-};
-
 export const slideRow = (
   grid: string[][],
   rowIndex: number,
@@ -112,6 +98,18 @@ export const handleSlide = (
     ? slideRow(grid, index, direction, nextLetter)
     : slideColumn(grid, index, direction, nextLetter);
 
+  // Determine the coordinates of the new tile
+  let newTile: { row: number; col: number } | undefined = undefined;
+  if (direction === 'left') {
+    newTile = { row: index, col: newGrid[0].length - 1 };
+  } else if (direction === 'right') {
+    newTile = { row: index, col: 0 };
+  } else if (direction === 'up') {
+    newTile = { row: newGrid.length - 1, col: index };
+  } else if (direction === 'down') {
+    newTile = { row: 0, col: index };
+  }
+
   // Update restrictions
   const newRestrictions = updateRestrictions(restrictions, direction, index);
 
@@ -130,6 +128,7 @@ export const handleSlide = (
     score: newScore,
     wordScore,
     moves: gameState.moves + 1,
-    words
+    words,
+    newTile
   };
 }; 

@@ -8,6 +8,7 @@ export interface GameState {
   restrictions: SlideRestrictions;
   wordHighlights: WordHighlight[];
   words: string[]; // List of currently detected words
+  newTile?: { row: number; col: number }; // Coordinates of the newly inserted tile
 }
 
 export interface SlideRestrictions {
@@ -28,10 +29,12 @@ export interface GridProps {
   restrictions: SlideRestrictions;
   wordHighlights: WordHighlight[];
   disableAll?: boolean;
+  newTile?: { row: number; col: number };
 }
 
 export interface TileProps {
   letter: string;
+  isNew?: boolean;
 }
 
 export interface ArrowButtonProps {
