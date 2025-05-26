@@ -1,26 +1,20 @@
 # Queuedle
 
-Queuedle is a daily word sliding puzzle game. Slide rows and columns of a 5x5 letter grid to form valid English words, using a queue of upcoming letters. Each move consumes a letter from the queue, and each row or column can only be slid in one direction per game. The goal is to form as many words as possible for the highest score.
+Queuedle is a daily word sliding puzzle game. Slide rows and columns of a 5x5 letter grid to form valid English words, using a queue of upcoming letters. Each move consumes a letter from the queue, and each row or column can only be slid in one direction per game. The goal is to form as many words as possible for the highest score. No need to use every letter from the queue.
 
-## Gameplay
-- 5x5 grid of letters
-- Slide rows (left/right) or columns (up/down) to shift letters
-- Each move uses the next letter from a 15-letter queue (FIFO)
-- Once a row/column is slid in one direction, it cannot be slid the opposite way
-- Words (min. 3 letters) can be formed horizontally or vertically
-- Words are checked against the Scrabble (TWL06-US) dictionary
-- Each letter in a word scores 1 point
-- The puzzle is the same for all players each day (seeded by UTC date)
+<br>
 
-## Visuals
-- Words are highlighted with a soft blue outline
-- Scrabble-inspired color theme
-- Responsive, mobile-friendly design
+<img src="https://github.com/healeycodes/queuedle/blob/main/public/preview.png" alt="A screenshot of a game of queuedle." width="535px">
+
+<br>
 
 ## Tech Stack
 - [Next.js](https://nextjs.org/) (React, TypeScript)
 - [Tailwind CSS](https://tailwindcss.com/) for styling
+- [Motion](https://www.npmjs.com/package/framer-motion) for animation
 - Custom game logic and seeded randomization
+
+<br>
 
 ## Getting Started
 
@@ -33,6 +27,3 @@ Queuedle is a daily word sliding puzzle game. Slide rows and columns of a 5x5 le
    npm run dev
    ```
 3. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## License
-MIT
