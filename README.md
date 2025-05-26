@@ -4,7 +4,7 @@ Queuedle is a daily word sliding puzzle game. Slide rows and columns of a 5x5 le
 
 <br>
 
-<img src="https://github.com/healeycodes/queuedle/blob/main/public/preview.png" alt="A screenshot of a game of queuedle." width="535px">
+<img src="https://github.com/healeycodes/queuedle/blob/main/public/preview.png" alt="A screenshot of a game of queuedle." width="360px">
 
 <br>
 
