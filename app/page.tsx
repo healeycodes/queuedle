@@ -94,16 +94,19 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-2 flex flex-col items-center bg-gray-50">
-      <p className="text-md text-gray-700 mb-4 font-bold">
+      <div className="text-md text-gray-700 mb-4 font-bold">
         Daily Queuedle #{getQueuedleDayNumber()} by <a className="text-blue-500" href="https://twitter.com/healeycodes">@healeycodes</a>
-      </p>
+        <div className="text-md font-medium text-gray-400 mb-4">
+          Read: <a className="text-blue-500" href="https://healeycodes.com/how-i-made-queuedle">How I Made Queuedle</a>
+        </div>
+      </div>
       <p className="max-w-xs mx-auto text-md text-gray-700 mb-6 text-left">
-      Slide rows or columns to form words, pulling letters from the queue. Each row or column slides in one direction. No need to empty the letter queue — solve for the highest score.
+        Slide rows or columns to form words, pulling letters from the queue. Each row or column slides in one direction. No need to empty the letter queue — solve for the highest score.
       </p>
       <div className="mb-6">
         {(!isQueueEmpty) && (
-          <QueueDisplay 
-            queue={loading || !gameState ? blankQueue : gameState.queue} 
+          <QueueDisplay
+            queue={loading || !gameState ? blankQueue : gameState.queue}
             totalLetters={loading || !gameState ? 0 : gameState.queue.length}
             isLoading={loading || !gameState}
           />
@@ -114,7 +117,7 @@ export default function Home() {
         Moves: {loading || !gameState ? '...' : gameState.moves}
       </div>
       <div className="mb-20">
-        <Grid 
+        <Grid
           grid={loading || !gameState ? blankGrid : gameState.grid}
           onSlide={onSlide}
           restrictions={loading || !gameState ? {
@@ -131,51 +134,24 @@ export default function Home() {
           !wordsText.trim()
             ? '...'
             : (() => {
-                if (wordsText.length <= 21) {
-                  return wordsText.split('').map((letter, index) => (
-                    <motion.span
-                      key={index}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.08, delay: index * 0.02 }}
-                    >
-                      {letter}
-                    </motion.span>
-                  ));
-                }
-                // Find last comma before or at 21st character
-                const splitIdx = wordsText.lastIndexOf(',', 21);
-                if (splitIdx === -1) {
-                  // No comma found, just split at 21
-                  return <>
-                    {wordsText.slice(0, 21).split('').map((letter, index) => (
-                      <motion.span
-                        key={index}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.08, delay: index * 0.02 }}
-                      >
-                        {letter}
-                      </motion.span>
-                    ))}
-                    <br/>
-                    {wordsText.slice(21).split('').map((letter, index) => (
-                      <motion.span
-                        key={21 + index}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.08, delay: (21 + index) * 0.02 }}
-                      >
-                        {letter}
-                      </motion.span>
-                    ))}
-                  </>;
-                }
-                // Split at the last comma
-                const first = wordsText.slice(0, splitIdx + 1);
-                const second = wordsText.slice(splitIdx + 1).trimStart();
+              if (wordsText.length <= 21) {
+                return wordsText.split('').map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.08, delay: index * 0.02 }}
+                  >
+                    {letter}
+                  </motion.span>
+                ));
+              }
+              // Find last comma before or at 21st character
+              const splitIdx = wordsText.lastIndexOf(',', 21);
+              if (splitIdx === -1) {
+                // No comma found, just split at 21
                 return <>
-                  {first.split('').map((letter, index) => (
+                  {wordsText.slice(0, 21).split('').map((letter, index) => (
                     <motion.span
                       key={index}
                       initial={{ opacity: 0 }}
@@ -185,19 +161,46 @@ export default function Home() {
                       {letter}
                     </motion.span>
                   ))}
-                  <br/>
-                  {second.split('').map((letter, index) => (
+                  <br />
+                  {wordsText.slice(21).split('').map((letter, index) => (
                     <motion.span
-                      key={first.length + index}
+                      key={21 + index}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ duration: 0.08, delay: (first.length + index) * 0.02 }}
+                      transition={{ duration: 0.08, delay: (21 + index) * 0.02 }}
                     >
                       {letter}
                     </motion.span>
                   ))}
                 </>;
-              })()
+              }
+              // Split at the last comma
+              const first = wordsText.slice(0, splitIdx + 1);
+              const second = wordsText.slice(splitIdx + 1).trimStart();
+              return <>
+                {first.split('').map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.08, delay: index * 0.02 }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+                <br />
+                {second.split('').map((letter, index) => (
+                  <motion.span
+                    key={first.length + index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.08, delay: (first.length + index) * 0.02 }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+              </>;
+            })()
         )}
       </div>
       <div className="text-md font-medium text-gray-400 mb-2">
