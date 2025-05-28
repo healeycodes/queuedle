@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Queuedle",
-  description: "Daily word sliding puzzle game",
+  description: "Daily word-sliding puzzle game",
 };
 
 export default function RootLayout({
