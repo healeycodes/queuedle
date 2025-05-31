@@ -10,7 +10,7 @@ import { findWords, calculateWordScore, getWordsFromHighlights } from './utils/w
 import { motion } from 'framer-motion';
 
 // Initialize game state with seeded random
-const getInitialGameState = (): GameState => {
+export const getInitialGameState = (): GameState => {
   const seed = getCurrentDaySeed();
   const { grid, queue, attempt } = generateValidGameState(seed);
   console.log(`[Queuedle] Required ${attempt} attempts to generate a valid board`);
@@ -97,7 +97,9 @@ export default function Home() {
       <div className="text-md text-gray-700 mb-4 font-bold">
         Daily Queuedle #{getQueuedleDayNumber()} by <a className="text-blue-500" href="https://twitter.com/healeycodes">@healeycodes</a>
         <div className="text-md font-medium text-gray-400 mb-4">
-          Read: <a className="text-blue-500" href="https://healeycodes.com/how-i-made-queuedle">How I Made Queuedle</a>
+          1: <a className="text-blue-500" href="https://healeycodes.com/how-i-made-queuedle">How I Made Queuedle</a>
+          <br />
+          2: <a className="text-blue-500" href="https://healeycodes.com/solving-queuedle">Solving Queuedle</a>
         </div>
       </div>
       <p className="max-w-xs mx-auto text-md text-gray-700 mb-6 text-left">
