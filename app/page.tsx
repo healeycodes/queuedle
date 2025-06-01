@@ -4,41 +4,10 @@ import { useState, useEffect } from 'react';
 import { GameState, GRID_SIZE, VISIBLE_QUEUE_SIZE, SlideDirection } from './types';
 import Grid from './components/Grid';
 import QueueDisplay from './components/QueueDisplay';
-import { handleSlide } from './utils/gameLogic';
-import { getCurrentDaySeed, generateValidGameState } from './utils/seededRandom';
-import { findWords, calculateWordScore, getWordsFromHighlights } from './utils/wordDetection';
+import { getInitialGameState, handleSlide } from './utils/gameLogic';
+import { getCurrentDaySeed } from './utils/seededRandom';
+import { getWordsFromHighlights } from './utils/wordDetection';
 import { motion } from 'framer-motion';
-
-// Initialize game state with seeded random
-export const getInitialGameState = (): GameState => {
-  const seed = getCurrentDaySeed();
-  const { grid, queue, attempt } = generateValidGameState(seed);
-  console.log(`[Queuedle] Required ${attempt} attempts to generate a valid board`);
-  const wordHighlights = findWords(grid);
-  const wordScore = calculateWordScore(wordHighlights);
-  const score = wordScore;
-  const words = getWordsFromHighlights(grid, wordHighlights);
-
-  return {
-    grid,
-    queue,
-    score,
-    wordScore,
-    moves: 0,
-    restrictions: {
-      rows: {
-        left: Array(GRID_SIZE).fill(false),
-        right: Array(GRID_SIZE).fill(false)
-      },
-      columns: {
-        up: Array(GRID_SIZE).fill(false),
-        down: Array(GRID_SIZE).fill(false)
-      }
-    },
-    wordHighlights,
-    words
-  };
-};
 
 // Helper to get Queuedle day number (24 May 2025 is day 1)
 const getQueuedleDayNumber = () => {

@@ -1,5 +1,38 @@
-import { GameState, SlideDirection } from '../types';
+import { GameState, GRID_SIZE, SlideDirection } from '../types';
+import { generateValidGameState } from './seededRandom';
+import { getCurrentDaySeed } from './seededRandom';
 import { findWords, calculateWordScore, getWordsFromHighlights } from './wordDetection';
+
+// Initialize game state with seeded random
+export const getInitialGameState = (): GameState => {
+  const seed = getCurrentDaySeed();
+  const { grid, queue, attempt } = generateValidGameState(seed);
+  console.log(`[Queuedle] Required ${attempt} attempts to generate a valid board`);
+  const wordHighlights = findWords(grid);
+  const wordScore = calculateWordScore(wordHighlights);
+  const score = wordScore;
+  const words = getWordsFromHighlights(grid, wordHighlights);
+
+  return {
+    grid,
+    queue,
+    score,
+    wordScore,
+    moves: 0,
+    restrictions: {
+      rows: {
+        left: Array(GRID_SIZE).fill(false),
+        right: Array(GRID_SIZE).fill(false)
+      },
+      columns: {
+        up: Array(GRID_SIZE).fill(false),
+        down: Array(GRID_SIZE).fill(false)
+      }
+    },
+    wordHighlights,
+    words
+  };
+};
 
 export const slideRow = (
   grid: string[][],

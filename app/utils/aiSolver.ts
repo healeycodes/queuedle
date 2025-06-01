@@ -1,4 +1,4 @@
-import { getInitialGameState } from '../page';
+import { getInitialGameState } from './gameLogic';
 import { GameState, SlideDirection, GRID_SIZE } from '../types';
 import { handleSlide } from './gameLogic';
 import { findWords } from './wordDetection';
