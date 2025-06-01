@@ -48,9 +48,9 @@ class PriorityQueue<T> {
         const length = this.heap.length;
         const element = this.heap[0];
         while (true) {
-            let leftChildIdx = 2 * idx + 1;
-            let rightChildIdx = 2 * idx + 2;
-            let swap = null;
+            const leftChildIdx = 2 * idx + 1;
+            const rightChildIdx = 2 * idx + 2;
+            let swap: number | null = null;
             if (leftChildIdx < length) {
                 if (this.heap[leftChildIdx].priority > element.priority) {
                     swap = leftChildIdx;
