@@ -1,12 +1,8 @@
-import { GridProps } from '../types';
+import { GridProps } from '../types/components';
+import { TILE_TOTAL } from '../constants';
 import Tile from './Tile';
 import ArrowButton from './ArrowButton';
 import { motion, AnimatePresence } from 'framer-motion';
-
-// Constants for tile sizing (must match Tile component)
-const TILE_SIZE = 44; // px, matches w-11 h-11
-const TILE_MARGIN = 4; // px, matches m-1
-const TILE_TOTAL = TILE_SIZE + TILE_MARGIN * 2; // 52px
 
 // Helper to get outline style for a word
 function getOutlineStyle(highlight: GridProps['wordHighlights'][number]) {

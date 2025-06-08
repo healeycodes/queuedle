@@ -1,21 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { GameState, GRID_SIZE, VISIBLE_QUEUE_SIZE, SlideDirection } from './types';
+import { GameState, SlideDirection } from './types/game';
+import { GRID_SIZE, VISIBLE_QUEUE_SIZE, MS_PER_DAY, FIRST_QUEUEDLE_DAY } from './constants';
 import Grid from './components/Grid';
 import QueueDisplay from './components/QueueDisplay';
-import { getInitialGameState, handleSlide } from './utils/gameLogic';
-import { getCurrentDaySeed } from './utils/seededRandom';
-import { getWordsFromHighlights } from './utils/wordDetection';
+import { getInitialGameState, handleSlide } from './utils/game/gameLogic';
+import { getCurrentDaySeed } from './utils/game/seededRandom';
+import { getWordsFromHighlights } from './utils/words/wordDetection';
 import { motion } from 'framer-motion';
 
 // Helper to get Queuedle day number (24 May 2025 is day 1)
 const getQueuedleDayNumber = () => {
-  const msPerDay = 24 * 60 * 60 * 1000;
-  const firstDay = new Date(2025, 4, 24).getTime(); // Months are 0-indexed: 4 = May
+  const firstDay = FIRST_QUEUEDLE_DAY.getTime();
   const now = new Date();
   const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  return Math.floor((todayLocal - firstDay) / msPerDay) + 1;
+  return Math.floor((todayLocal - firstDay) / MS_PER_DAY) + 1;
 };
 
 export default function Home() {

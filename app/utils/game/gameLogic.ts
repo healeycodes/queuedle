@@ -1,7 +1,8 @@
-import { GameState, GRID_SIZE, SlideDirection } from '../types';
+import { GameState, SlideDirection } from '../../types/game';
+import { GRID_SIZE } from '../../constants';
 import { generateValidGameState } from './seededRandom';
 import { getCurrentDaySeed } from './seededRandom';
-import { findWords, calculateWordScore, getWordsFromHighlights } from './wordDetection';
+import { findWords, calculateWordScore, getWordsFromHighlights } from '../words/wordDetection';
 
 // Initialize game state with seeded random
 export const getInitialGameState = (): GameState => {

@@ -1,4 +1,7 @@
 # 🧩 Queuedle
+> My blog posts:
+> - [How I Made Queuedle](https://healeycodes.com/how-i-made-queuedle)
+> - [Solving Queuedle](https://healeycodes.com/solving-queuedle)
 
 Queuedle is a daily word sliding puzzle game. Slide rows and columns of a 5x5 letter grid to form valid English words, using a queue of upcoming letters. Each move consumes a letter from the queue, and each row or column can only be slid in one direction per game. The goal is to form as many words as possible for the highest score.
 
@@ -27,3 +30,13 @@ Queuedle is a daily word sliding puzzle game. Slide rows and columns of a 5x5 le
    npm run dev
    ```
 3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## AI Solver
+
+To run the AI solver that finds optimal solutions for the daily puzzle:
+
+```bash
+npm run solver
+```
+
+The solver uses a best-first search algorithm to explore possible moves and find high-scoring solutions. It will output the best move sequence and final score to the console.

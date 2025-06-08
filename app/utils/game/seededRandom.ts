@@ -1,3 +1,5 @@
+import { findWords } from '../words/wordDetection';
+
 // Simple seeded random number generator
 export class SeededRandom {
   private seed: number;
@@ -85,8 +87,6 @@ export const generateGameState = (seed: number) => {
   
   return { grid, queue };
 };
-
-import { findWords } from './wordDetection';
 
 // Generate a valid game state with no words on the board
 export const generateValidGameState = (baseSeed: number) => {

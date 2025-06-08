@@ -1,4 +1,4 @@
-import twl06 from '../../data/twl06.json';
+import twl06 from '../../../data/twl06.json';
 
 const VALID_WORDS = new Set(twl06.filter(word => word.length >= 3).map(word => word.toLowerCase()));
 

@@ -1,8 +1,9 @@
-import { getInitialGameState } from './gameLogic';
-import { GameState, SlideDirection, GRID_SIZE } from '../types';
-import { handleSlide } from './gameLogic';
-import { findWords } from './wordDetection';
-import { calculateWordScore } from './wordDetection';
+import { getInitialGameState } from './game/gameLogic';
+import { GameState, SlideDirection } from '../types/game';
+import { GRID_SIZE } from '../constants';
+import { handleSlide } from './game/gameLogic';
+import { findWords } from './words/wordDetection';
+import { calculateWordScore } from './words/wordDetection';
 
 export type Move = { direction: SlideDirection; index: number };
 
@@ -111,7 +112,7 @@ type Node = { state: GameState; moves: Move[]; score: number };
 // Best-first search for Queuedle
 export function bestFirstSearch(
     initialState: GameState,
-    maxNodes: number = 1_000_000
+    maxNodes: number = 500_000
 ): { bestState: GameState; moveSequence: Move[] } {
     let nodesExpanded = 0;
     const initialNode: Node = {
@@ -129,6 +130,10 @@ export function bestFirstSearch(
 
     // Always explore the highest-scoring node next
     while (queue.length > 0 && nodesExpanded < maxNodes) {
+        if (nodesExpanded % 50_000 === 0) {
+            console.log(`[Queuedle] Expanded ${nodesExpanded}/${maxNodes} nodes, queue length: ${queue.length}`);
+        }
+
         const node = queue.dequeue()!;
         nodesExpanded++;
 
@@ -161,6 +166,7 @@ const initialState = getInitialGameState();
 const start = performance.now();
 const { bestState, moveSequence } = bestFirstSearch(initialState);
 const end = performance.now();
-console.log(moveSequence);
-console.log(bestState.score);
-console.log(`Time taken: ${end - start}ms`);
+console.log(`[Queuedle] Moves: ${moveSequence.length}`);
+console.log(`[Queuedle] Score: ${bestState.score}`);
+console.log(`[Queuedle] Time taken: ${end - start}ms`);
+

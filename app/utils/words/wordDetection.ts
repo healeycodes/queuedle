@@ -1,4 +1,4 @@
-import { WordHighlight } from '../types';
+import { WordHighlight } from '../../types/game';
 import { isValidWord } from './dictionary';
 
 export const findWords = (grid: string[][]): WordHighlight[] => {

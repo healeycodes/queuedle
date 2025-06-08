@@ -1,4 +1,4 @@
-import { ArrowButtonProps } from '../types';
+import { ArrowButtonProps } from '../types/components';
 import { ArrowBigDown, ArrowBigUp, ArrowBigLeft, ArrowBigRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 

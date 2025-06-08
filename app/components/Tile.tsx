@@ -1,4 +1,4 @@
-import { TileProps } from '../types';
+import { TileProps } from '../types/components';
 import { motion } from 'framer-motion';
 
 export default function Tile({ letter, isNew }: TileProps) {

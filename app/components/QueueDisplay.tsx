@@ -1,5 +1,5 @@
-import { QueueDisplayProps } from '../types';
-import { VISIBLE_QUEUE_SIZE } from '../types';
+import { QueueDisplayProps } from '../types/components';
+import { VISIBLE_QUEUE_SIZE } from '../constants';
 import { motion } from 'framer-motion';
 
 export default function QueueDisplay({ queue, totalLetters, isLoading = false }: QueueDisplayProps & { isLoading?: boolean }) {
