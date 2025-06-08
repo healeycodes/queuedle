@@ -14,20 +14,19 @@ Queuedle is a daily word sliding puzzle game. Slide rows and columns of a 5x5 le
 <br>
 
 ## Tech Stack
-- [Next.js](https://nextjs.org/) (React, TypeScript)
-- [Tailwind CSS](https://tailwindcss.com/) for styling
-- [Motion](https://www.npmjs.com/package/framer-motion) for animation
-- Custom game logic and seeded randomization
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Motion](https://www.npmjs.com/package/framer-motion) (for a few animations)
 
 <br>
 
 ## Getting Started
 
-1. **Install dependencies:**
+1. Install dependencies:
    ```bash
    npm install
    ```
-2. **Run the development server:**
+2. Run the development server:
    ```bash
    npm run dev
    ```
@@ -42,3 +41,5 @@ npm run solver
 ```
 
 The solver uses a best-first search algorithm to explore possible moves and find high-scoring solutions. It will output the best move sequence and final score to the console.
+
+Lots more info about the solver in [my blog post](https://healeycodes.com/solving-queuedle).
